@@ -1,19 +1,29 @@
 import ApiError from './api-error.mjs';
 
-export default function errHandler(error, request, reply) {
-  if (error instanceof ApiError) {
-    const content = {
-      error: error.name,
-      message: error.message,
-      statusCode: error.statusCode,
-    };
+export default function errHandler(err, request, reply) {
+  const { statusCode } = err;
 
-    if (error.data.length) {
-      content.data = error.data;
+  const content = {
+    statusCode,
+    error: err.name,
+    message: err.message,
+  };
+
+  if (err instanceof ApiError) {
+    if (err.data.length) {
+      content.data = err.data;
     }
 
     return reply
-      .code(error.statusCode)
+      .code(statusCode)
+      .send(content);
+  }
+
+  if (statusCode === 400) {
+    content.error = 'Bad Request';
+
+    return reply
+      .code(statusCode)
       .send(content);
   }
 

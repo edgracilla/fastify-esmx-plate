@@ -21,10 +21,13 @@ function app(config) {
   // -- app loader
 
   server.after(async () => {
-    const versions = sysUtils.getDirs(`${config.root}/src/modules/*`);
+    const apiPath = `${config.root}/src/api`;
+    const versions = sysUtils.getDirs(`${apiPath}/*`);
 
     versions.forEach((version) => {
-      const routes = sysUtils.getFiles(`${config.root}/src/modules/${version}/*/routes.mjs`);
+      const routes = sysUtils.getFiles(`${apiPath}/${version}/modules/*/routes.mjs`);
+
+      // console.log(routes)
       routes.map(async (routePath) => {
         const route = import(routePath);
         server.register(route, { prefix: `/${version}` });
