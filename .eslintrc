@@ -10,5 +10,8 @@
   ],
   "parserOptions": {
     "ecmaVersion": 2022
+  },
+  "rules": {
+    "import/extensions": [2, "ignorePackages"]
   }
 }

@@ -1,11 +1,14 @@
-// configuratoin will be initiated here
+import dotenv from 'dotenv';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-require('dotenv').config();
+import app from './src/app.mjs';
 
-const app = require('./src/app');
+dotenv.config();
 
 const port = +(process.env.PORT || 8080);
 const env = process.env.NODE_ENV || 'development';
+const root = dirname(fileURLToPath(import.meta.url));
 
 const logger = env === 'development'
   ? { transport: { target: 'pino-pretty', options: { translateTime: true } } }
@@ -14,13 +17,13 @@ const logger = env === 'development'
 const ajv = {
   customOptions: {
     allErrors: true,
-    keywords: ['prereq'],
   },
 };
 
 const appConfig = {
   fastify: { logger, ajv },
   port,
+  root,
 };
 
 const server = app(appConfig);
@@ -40,4 +43,4 @@ const server = app(appConfig);
   });
 });
 
-module.exports = server;
+export default server;

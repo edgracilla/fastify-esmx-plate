@@ -8,6 +8,8 @@ class ApiError extends Error {
       this.name = 'AuthError';
     } else if (code === 403) {
       this.name = 'ForbiddenError';
+    } else if (code === 404) {
+      this.name = 'NotFoundError';
     } else {
       this.name = 'InternalServerError';
     }
@@ -17,4 +19,4 @@ class ApiError extends Error {
   }
 }
 
-module.exports = ApiError;
+export default ApiError;
